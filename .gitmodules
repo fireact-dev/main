@@ -11,3 +11,6 @@
 [submodule "core-code"]
 	path = core-code
 	url = git@github.com:fireact-dev/core.git
+[submodule "core-demo"]
+	path = core-demo
+	url = git@github.com:fireact-dev/core-demo.git
