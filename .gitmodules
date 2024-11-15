@@ -1,7 +1,3 @@
-[submodule "website"]
-	path = website
-	url = git@github.com:fireact-dev/website.git
-	branch = main
 [submodule "saas-demo"]
 	path = saas-demo
 	url = git@github.com:fireact-dev/saas-demo.git
