@@ -6,6 +6,12 @@ A comprehensive open-source framework for building production-ready SaaS applica
 
 fireact.dev provides a complete foundation for building modern SaaS applications. It combines industry-standard technologies and best practices to help developers launch their SaaS products faster and more efficiently.
 
+## Demo
+
+![SaaS Demo](saas-demo.png)
+
+Visit our [demos page](https://fireact.dev/demos/) to explore live demonstrations of both the Core and SaaS versions, showcasing the full range of features and capabilities.
+
 ## Features
 
 ### Core Features
