@@ -13,3 +13,6 @@
 [submodule "website"]
 	path = website
 	url = git@github.com:fireact-dev/website.git
+[submodule "docs"]
+	path = docs
+	url = git@github.com:fireact-dev/docs.git
