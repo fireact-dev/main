@@ -34,3 +34,5 @@ coverage/
 # Temporary files
 *.log
 *.tmp
+
+test-fireact-app

@@ -60,8 +60,10 @@ program
 
       // 3. Install Dependencies with --legacy-peer-deps
       spinner.start('Installing dependencies...');
-      await execa('npm', ['install', '@fireact.dev/core', 'firebase', 'react-router-dom', 'i18next', 'react-i18next', '@headlessui/react', '@heroicons/react', 'tailwindcss', 'i18next-browser-languagedetector', '--legacy-peer-deps'], { stdio: 'inherit' });
-      await execa('npm', ['install', '-D', 'postcss', 'autoprefixer', '--legacy-peer-deps'], { stdio: 'inherit' });
+      // Install core dependencies
+      await execa('npm', ['install', '@fireact.dev/core', 'firebase', 'react-router-dom', 'i18next', 'react-i18next', '@headlessui/react', '@heroicons/react', 'tailwindcss@3', 'i18next-browser-languagedetector', '--legacy-peer-deps'], { stdio: 'inherit' });
+      // Install dev dependencies
+      await execa('npm', ['install', '-D', '@vitejs/plugin-react', '@types/react', '@types/react-dom', 'typescript', 'postcss', 'autoprefixer', '@tailwindcss/postcss', 'eslint', '@eslint/js', 'eslint-plugin-react-hooks', 'eslint-plugin-react-refresh', 'globals', 'typescript-eslint', '--legacy-peer-deps'], { stdio: 'inherit' });
       spinner.succeed('Dependencies installed successfully.');
 
       // 4. Generate Configuration Files and Structure
@@ -157,21 +159,62 @@ program
       spinner.start(`Fetching SDK config for project "${selectedProjectId}"...`);
       const sdkConfigResult = await execa('firebase', ['apps:sdkconfig', 'WEB', '--json', '--project', selectedProjectId], { reject: false, stdio: 'pipe' });
 
+      // Log the raw SDK config result for debugging
+      console.log('Raw SDK config result:', sdkConfigResult.stdout);
+
       if (sdkConfigResult.exitCode !== 0 || !sdkConfigResult.stdout || sdkConfigResult.stdout.trim() === '') {
         spinner.fail('Failed to fetch Firebase SDK config.');
         console.error(chalk.red('Ensure your selected project has a web app configured.'));
         process.exit(1);
       }
 
-      const sdkConfig = JSON.parse(sdkConfigResult.stdout);
-      const firebaseConfig = sdkConfig.web; // Assuming 'web' key contains the config
+      let sdkConfig;
+      try {
+        sdkConfig = JSON.parse(sdkConfigResult.stdout);
+      } catch (parseError) {
+        spinner.fail('Failed to parse Firebase SDK config.');
+        console.error(chalk.red('Error parsing SDK config:', parseError));
+        console.error(chalk.red('Raw SDK config output:', sdkConfigResult.stdout));
+        process.exit(1);
+      }
+
+      // Extract firebaseConfig from the correct path in the SDK config result
+      const firebaseConfig = sdkConfig.result.sdkConfig;
+
+      // Log the fetched firebaseConfig for debugging
+      console.log('Fetched firebaseConfig:', JSON.stringify(firebaseConfig, null, 2));
 
       // Populate src/config.json with fetched Firebase config
-      const configJsonPath = path.join(projectPath, 'src/config.json'); // Use projectPath here
-      const currentConfig = await fs.readJson(configJsonPath);
-      currentConfig.firebase = firebaseConfig;
-      await fs.writeJson(configJsonPath, currentConfig, { spaces: 2 });
-      spinner.succeed('Firebase SDK config fetched and applied.');
+      const configJsonPath = path.join(projectPath, 'src/config.json');
+      try {
+        // Check if firebaseConfig is valid before proceeding
+        if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
+          throw new Error('Firebase config is empty or invalid.');
+        }
+
+        const currentConfig = await fs.readJson(configJsonPath);
+        if (!currentConfig) {
+          throw new Error('Failed to read config.json');
+        }
+        
+        currentConfig.firebase = firebaseConfig;
+        await fs.writeJson(configJsonPath, currentConfig, { spaces: 2 });
+        
+        // Verify the config was written
+        const writtenConfig = await fs.readJson(configJsonPath);
+        if (!writtenConfig.firebase || Object.keys(writtenConfig.firebase).length === 0) {
+          throw new Error('Firebase config not written to config.json or is empty.');
+        }
+        
+        spinner.succeed('Firebase SDK config fetched and applied.');
+        console.log(chalk.green('Firebase config successfully written to config.json'));
+      } catch (error) {
+        spinner.fail('Failed to update config.json with Firebase config');
+        console.error(chalk.red('Error details:'), error);
+        console.error(chalk.yellow('Please manually add the Firebase config to src/config.json:'));
+        console.log(JSON.stringify({ firebase: firebaseConfig }, null, 2));
+        process.exit(1);
+      }
 
       // Create .firebaserc file
       const firebasercContent = {
@@ -199,123 +242,8 @@ program
   });
 
 async function createTemplateFiles(projectRoot) {
-  const tailwindConfigContent = `
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@fireact.dev/core/dist/**/*.{js,mjs}"
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-`;
-
-  const postcssConfigContent = `
-export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
-`;
-
-  const indexCssContent = `
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-`;
-
-  const appTsxContent = `
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import {
-  AuthProvider,
-  ConfigProvider,
-  LoadingProvider,
-  PublicLayout,
-  AuthenticatedLayout,
-  SignIn,
-  SignUp,
-  ResetPassword,
-  Dashboard,
-  Profile,
-  EditName,
-  EditEmail,
-  ChangePassword,
-  DeleteAccount,
-  DesktopMenuItems,
-  MobileMenuItems,
-  Logo,
-  FirebaseAuthActions
-} from '@fireact.dev/core';
-import config from './config.json';
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import en from './i18n/locales/en';
-import zh from './i18n/locales/zh';
-
-// Initialize i18next
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources: {
-      en: {
-        translation: en
-      },
-      zh: {
-        translation: zh
-      }
-    },
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false
-    }
-  });
-
-function App() {
-  return (
-    <Router>
-      <ConfigProvider config={config}>
-        <AuthProvider>
-          <LoadingProvider>
-            <Routes>
-              <Route element={
-                <AuthenticatedLayout
-                  desktopMenuItems={<DesktopMenuItems />}
-                  mobileMenuItems={<MobileMenuItems />}
-                  logo={<Logo className="w-10 h-10" />}
-                />
-              }>
-                <Route path={config.pages.home} element={<Navigate to={config.pages.dashboard} />} />
-                <Route path={config.pages.dashboard} element={<Dashboard />} />
-                <Route path={config.pages.profile} element={<Profile />} />
-                <Route path={config.pages.editName} element={<EditName />} />
-                <Route path={config.pages.editEmail} element={<EditEmail />} />
-                <Route path={config.pages.changePassword} element={<ChangePassword />} />
-                <Route path={config.pages.deleteAccount} element={<DeleteAccount />} />
-              </Route>
-              <Route element={<PublicLayout logo={<Logo className="w-20 h-20" />} />}>
-                <Route path={config.pages.signIn} element={<SignIn />} />
-                <Route path={config.pages.signUp} element={<SignUp />} />
-                <Route path={config.pages.resetPassword} element={<ResetPassword />} />
-                <Route path={config.pages.firebaseActions} element={<FirebaseAuthActions />} />
-              </Route>
-            </Routes>
-          </LoadingProvider>
-        </AuthProvider>
-      </ConfigProvider>
-    </Router>
-  );
-}
-
-export default App;
-`;
-
+  let spinner;
+  const githubRawUrl = 'https://raw.githubusercontent.com/fireact-dev/core-demo/main';
   const configJsonContent = `
 {
   "name": "My SaaS",
@@ -362,24 +290,83 @@ export default App;
 }
 `;
 
-  // Write config files
-  await fs.writeFile(path.join(projectRoot, 'tailwind.config.js'), tailwindConfigContent);
-  await fs.writeFile(path.join(projectRoot, 'postcss.config.js'), postcssConfigContent);
-  await fs.writeFile(path.join(projectRoot, 'src/index.css'), indexCssContent);
-  await fs.writeFile(path.join(projectRoot, 'src/App.tsx'), appTsxContent);
+  // Write config.json
   await fs.writeFile(path.join(projectRoot, 'src/config.json'), configJsonContent);
+
+  // Download core configuration files from GitHub
+  spinner = ora('Downloading core configuration files...').start();
+  try {
+    // Download and save configuration files exactly as they are from core-demo
+      const filesToDownload = [
+      { 
+        url: `${githubRawUrl}/eslint.config.js`,
+        path: path.join(projectRoot, 'eslint.config.js')
+      },
+      { 
+        url: `${githubRawUrl}/firebase.json`,
+        path: path.join(projectRoot, 'firebase.json')
+      },
+      { 
+        url: `${githubRawUrl}/firestore.indexes.json`,
+        path: path.join(projectRoot, 'firestore.indexes.json')
+      },
+      { 
+        url: `${githubRawUrl}/firestore.rules`,
+        path: path.join(projectRoot, 'firestore.rules')
+      },
+      {
+        url: `${githubRawUrl}/postcss.config.js`,
+        path: path.join(projectRoot, 'postcss.config.js')
+      },
+      { 
+        url: `${githubRawUrl}/tailwind.config.js`,
+        path: path.join(projectRoot, 'tailwind.config.js')
+      },
+      {
+        url: `${githubRawUrl}/src/index.css`,
+        path: path.join(projectRoot, 'src/index.css')
+      },
+      {
+        url: `${githubRawUrl}/src/App.tsx`,
+        path: path.join(projectRoot, 'src/App.tsx')
+      }
+    ];
+
+    for (const file of filesToDownload) {
+      const response = await fetch(file.url);
+      if (!response.ok) throw new Error(`Failed to fetch ${path.basename(file.path)}`);
+      let content = await response.text();
+      await fs.writeFile(file.path, content);
+    }
+
+    spinner.succeed('Core configuration files downloaded successfully.');
+  } catch (error) {
+    spinner.fail('Failed to download core configuration files');
+    console.error(chalk.red('Error details:'), error);
+    throw error;
+  }
 
   // Create i18n directory and copy language files
   const i18nLocalesPath = path.join(projectRoot, 'src/i18n/locales');
   await fs.ensureDir(i18nLocalesPath);
 
-  // For now, we'll use placeholder content for language files.
-  // In a real CLI, these would be bundled with the CLI package.
-  const enLocaleContent = `{ "greeting": "Hello" }`;
-  const zhLocaleContent = `{ "greeting": "你好" }`;
-
-  await fs.writeFile(path.join(i18nLocalesPath, 'en.json'), enLocaleContent);
-  await fs.writeFile(path.join(i18nLocalesPath, 'zh.json'), zhLocaleContent);
+  // Download locale files from core repository
+  spinner = ora('Downloading locale files from core repository...').start();
+  try {
+    const locales = ['en', 'zh'];
+    for (const locale of locales) {
+      const url = `${githubRawUrl}/src/i18n/locales/${locale}.ts`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Failed to fetch ${locale}.ts`);
+      const content = await response.text();
+      await fs.writeFile(path.join(i18nLocalesPath, `${locale}.ts`), content);
+    }
+    spinner.succeed('Locale files downloaded successfully.');
+  } catch (error) {
+    spinner.fail('Failed to download locale files');
+    console.error(chalk.red('Error details:'), error);
+    throw error;
+  }
 }
 
 program.parse(process.argv);
