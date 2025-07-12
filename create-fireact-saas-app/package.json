@@ -1,0 +1,27 @@
+{
+  "name": "create-fireact-saas-app",
+  "version": "1.0.0",
+  "description": "CLI to create a new Fireact SaaS application",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "create-fireact-saas-app": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "execa": "^8.0.1",
+    "fs-extra": "^11.2.0",
+    "inquirer": "^9.2.12",
+    "ora": "^7.1.0"
+  },
+  "peerDependencies": {
+    "create-fireact-app": "^1.0.0"
+  }
+}
