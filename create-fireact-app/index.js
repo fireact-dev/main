@@ -243,7 +243,6 @@ program
 
 async function createTemplateFiles(projectRoot) {
   let spinner;
-  const githubRawUrl = 'https://raw.githubusercontent.com/fireact-dev/core-demo/main';
   const configJsonContent = `
 {
   "name": "My SaaS",
@@ -297,47 +296,44 @@ async function createTemplateFiles(projectRoot) {
   spinner = ora('Downloading core configuration files...').start();
   try {
     // Download and save configuration files exactly as they are from core-demo
-      const filesToDownload = [
-      { 
-        url: `${githubRawUrl}/eslint.config.js`,
-        path: path.join(projectRoot, 'eslint.config.js')
-      },
-      { 
-        url: `${githubRawUrl}/firebase.json`,
-        path: path.join(projectRoot, 'firebase.json')
-      },
-      { 
-        url: `${githubRawUrl}/firestore.indexes.json`,
-        path: path.join(projectRoot, 'firestore.indexes.json')
-      },
-      { 
-        url: `${githubRawUrl}/firestore.rules`,
-        path: path.join(projectRoot, 'firestore.rules')
-      },
-      {
-        url: `${githubRawUrl}/postcss.config.js`,
-        path: path.join(projectRoot, 'postcss.config.js')
-      },
-      { 
-        url: `${githubRawUrl}/tailwind.config.js`,
-        path: path.join(projectRoot, 'tailwind.config.js')
-      },
-      {
-        url: `${githubRawUrl}/src/index.css`,
-        path: path.join(projectRoot, 'src/index.css')
-      },
-      {
-        url: `${githubRawUrl}/src/App.tsx`,
-        path: path.join(projectRoot, 'src/App.tsx')
-      }
-    ];
+      const filesToCopy = [
+        { 
+          src: path.join(__dirname, 'templates', 'eslint.config.js'),
+          dest: path.join(projectRoot, 'eslint.config.js')
+        },
+        { 
+          src: path.join(__dirname, 'templates', 'firebase.json'),
+          dest: path.join(projectRoot, 'firebase.json')
+        },
+        { 
+          src: path.join(__dirname, 'templates', 'firestore.indexes.json'),
+          dest: path.join(projectRoot, 'firestore.indexes.json')
+        },
+        { 
+          src: path.join(__dirname, 'templates', 'firestore.rules'),
+          dest: path.join(projectRoot, 'firestore.rules')
+        },
+        {
+          src: path.join(__dirname, 'templates', 'postcss.config.js'),
+          dest: path.join(projectRoot, 'postcss.config.js')
+        },
+        { 
+          src: path.join(__dirname, 'templates', 'tailwind.config.js'),
+          dest: path.join(projectRoot, 'tailwind.config.js')
+        },
+        {
+          src: path.join(__dirname, 'templates', 'src', 'index.css'),
+          dest: path.join(projectRoot, 'src', 'index.css')
+        },
+        {
+          src: path.join(__dirname, 'templates', 'src', 'App.tsx'),
+          dest: path.join(projectRoot, 'src', 'App.tsx')
+        }
+      ];
 
-    for (const file of filesToDownload) {
-      const response = await fetch(file.url);
-      if (!response.ok) throw new Error(`Failed to fetch ${path.basename(file.path)}`);
-      let content = await response.text();
-      await fs.writeFile(file.path, content);
-    }
+      for (const file of filesToCopy) {
+        await fs.copy(file.src, file.dest);
+      }
 
     spinner.succeed('Core configuration files downloaded successfully.');
   } catch (error) {
@@ -346,22 +342,26 @@ async function createTemplateFiles(projectRoot) {
     throw error;
   }
 
-  // Create i18n directory and copy language files
-  const i18nLocalesPath = path.join(projectRoot, 'src/i18n/locales');
+  // Create i18n directory structure
+  const i18nPath = path.join(projectRoot, 'src/i18n');
+  const i18nLocalesPath = path.join(i18nPath, 'locales');
   await fs.ensureDir(i18nLocalesPath);
 
-  // Download locale files from core repository
-  spinner = ora('Downloading locale files from core repository...').start();
+  // Copy locale files from templates
+  spinner = ora('Copying locale files...').start();
   try {
     const locales = ['en', 'zh'];
     for (const locale of locales) {
-      const url = `${githubRawUrl}/src/i18n/locales/${locale}.ts`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`Failed to fetch ${locale}.ts`);
-      const content = await response.text();
-      await fs.writeFile(path.join(i18nLocalesPath, `${locale}.ts`), content);
+      const sourcePath = path.join(__dirname, 'templates', 'src', 'i18n', 'locales', `${locale}.ts`);
+      if (!fs.existsSync(sourcePath)) {
+        throw new Error(`Locale file not found: ${sourcePath}`);
+      }
+      await fs.copy(
+        sourcePath,
+        path.join(i18nLocalesPath, `${locale}.ts`)
+      );
     }
-    spinner.succeed('Locale files downloaded successfully.');
+    spinner.succeed('Locale files copied successfully.');
   } catch (error) {
     spinner.fail('Failed to download locale files');
     console.error(chalk.red('Error details:'), error);
