@@ -1,0 +1,71 @@
+{
+  "name": "Fireact",
+  "socialLogin": {
+    "google": true,
+    "microsoft": false,
+    "facebook": false,
+    "apple": false,
+    "github": false,
+    "twitter": false,
+    "yahoo": false
+  },
+  "pages": {
+    "home": "/",
+    "dashboard": "/dashboard",
+    "profile": "/profile",
+    "editName": "/edit-name",
+    "editEmail": "/edit-email",
+    "changePassword": "/change-password",
+    "deleteAccount": "/delete-account",
+    "signIn": "/signin",
+    "signUp": "/signup",
+    "resetPassword": "/reset-password",
+    "firebaseActions": "/auth/action",
+    "billing": "/subscription/:id/billing",
+    "createPlan": "/create-plan",
+    "subscription": "/subscription/:id",
+    "users": "/subscription/:id/users",
+    "invite": "/subscription/:id/users/invite",
+    "settings": "/subscription/:id/settings",
+    "changePlan": "/subscription/:id/billing/change-plan",
+    "cancelSubscription": "/subscription/:id/billing/cancel",
+    "managePaymentMethods": "/subscription/:id/billing/payment-methods",
+    "updateBillingDetails": "/subscription/:id/billing/update-details",
+    "transferOwnership": "/subscription/:id/billing/transfer-ownership"
+  },
+  "permissions": {
+      "access": {
+          "label": "Access",
+          "default": true,
+          "admin": false
+      },
+      "editor": {
+          "label": "Editor",
+          "default": false,
+          "admin": false
+      },
+      "admin": {
+          "label": "Administrator",
+          "default": false,
+          "admin": true
+      }
+  },
+  "settings": {
+      "name": {
+          "type": "string",
+          "required": true,
+          "label": "subscription.name",
+          "placeholder": "subscription.namePlaceholder"
+      }
+  },
+  "emulators": {
+    "enabled": true,
+    "host": "localhost",
+    "ports": {
+      "functions": 5001,
+      "firestore": 8080,
+      "auth": 9099,
+      "hosting": 5002
+    }
+  }
+}

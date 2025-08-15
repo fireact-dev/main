@@ -1,0 +1,52 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow authenticated users to read and write their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Subscription document rules
+    match /subscriptions/{docId} {
+      // Allow listing subscriptions for authenticated users
+      allow list: if request.auth != null;
+      
+      // Allow get (individual document read) only to users in permissions.access array
+      allow get: if request.auth != null 
+        && get(/databases/$(database)/documents/subscriptions/$(docId)).data.permissions.access.hasAny([request.auth.uid]);
+      
+      // Only allow updates to settings fields if user's UID is in permissions.admin array
+      allow update: if request.auth != null 
+        && get(/databases/$(database)/documents/subscriptions/$(docId)).data.permissions.admin.hasAny([request.auth.uid])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['settings']);
+      
+      // Block all other write operations
+      allow create, delete: if false;
+
+      // Invoices subcollection rules
+      match /invoices/{invoiceId} {
+        // Allow reading invoices to subscription admins
+        allow read: if request.auth != null 
+          && get(/databases/$(database)/documents/subscriptions/$(docId)).data.permissions.admin.hasAny([request.auth.uid]);
+        
+        // Block direct writes - only allow through cloud functions
+        allow write: if false;
+      }
+    }
+
+    // Invites collection rules
+    match /invites/{inviteId} {
+      // Allow reading invites to:
+      // 1. Subscription admins
+      // 2. Users whose email matches the invite email
+      allow read: if request.auth != null && (
+        get(/databases/$(database)/documents/subscriptions/$(resource.data.subscription_id)).data.permissions.admin.hasAny([request.auth.uid])
+        || (request.auth.token.email != null && request.auth.token.email.lower() == resource.data.email)
+      );
+      
+      // Block direct writes - only allow through cloud functions
+      allow write: if false;
+    }
+  }
+}

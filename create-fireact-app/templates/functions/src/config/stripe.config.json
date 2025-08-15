@@ -1,0 +1,27 @@
+{
+    "stripe": {
+        "secret_api_key": "{{secret_api_key}}",
+        "end_point_secret": "{{end_point_secret}}",
+        "plans":[
+            {
+                "id": "pro",
+                "titleKey": "plans.pro.title",
+                "popular": true,
+                "priceIds": [
+                    "{{price_id}}"
+                ],
+                "currency": "$",
+                "price": {{price}},
+                "frequency": "week",
+                "descriptionKeys": [
+                    "plans.pro.feature1",
+                    "plans.pro.feature2",
+                    "plans.pro.feature3",
+                    "plans.pro.feature4"
+                ],
+                "free": {{free}},
+                "legacy": false
+            }
+        ]
+    }
+}

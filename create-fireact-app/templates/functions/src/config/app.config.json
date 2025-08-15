@@ -1,0 +1,23 @@
+{
+    "emulators": {
+        "enabled": true,
+        "useTestKeys": true
+    },
+    "permissions": {
+        "access": {
+            "label": "Access",
+            "default": true,
+            "admin": false
+        },
+        "editor": {
+            "label": "Editor",
+            "default": false,
+            "admin": false
+        },
+        "admin": {
+            "label": "Administrator",
+            "default": false,
+            "admin": true
+        }
+    }
+}
