@@ -1,18 +1,15 @@
 [submodule "saas-demo"]
 	path = saas-demo
 	url = git@github.com:fireact-dev/saas-demo.git
-[submodule "saas-code"]
-	path = saas-code
-	url = git@github.com:fireact-dev/saas.git
-[submodule "core-code"]
-	path = core-code
-	url = git@github.com:fireact-dev/core.git
-[submodule "core-demo"]
-	path = core-demo
-	url = git@github.com:fireact-dev/core-demo.git
 [submodule "website"]
 	path = website
 	url = git@github.com:fireact-dev/website.git
 [submodule "docs"]
 	path = docs
 	url = git@github.com:fireact-dev/docs.git
+[submodule "source"]
+	path = source
+	url = git@github.com:fireact-dev/source.git
+[submodule "demo"]
+	path = demo
+	url = git@github.com:fireact-dev/demo.git
