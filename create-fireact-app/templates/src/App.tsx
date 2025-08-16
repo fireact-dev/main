@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import SubscriptionDashboard from './components/SubscriptionDashboard';
 import { 
   AuthProvider,
   LoadingProvider,
@@ -18,7 +19,6 @@ import {
   Logo,
   CreatePlan,
   Home,
-  SubscriptionDashboard,
   Plans,
   BillingForm,
   SubscriptionLayout,
