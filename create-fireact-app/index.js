@@ -90,22 +90,11 @@ program
       
       // Initialize npm in functions directory
       await execa('npm', ['init', '-y'], { 
-        stdio: 'inherit',
+        stdio: 'ignore',
         cwd: path.join(projectPath, 'functions')
       });
       
-      // Install dependencies (peer dependencies will be installed automatically in npm v7+)
-      await execa('npm', ['install', '@fireact.dev/functions'], { 
-        stdio: 'inherit',
-        cwd: path.join(projectPath, 'functions')
-      });
-      // Install dev dependencies
-      await execa('npm', ['install', '-D', '@typescript-eslint/eslint-plugin', '@typescript-eslint/parser', 'eslint', 'eslint-config-google', 'eslint-plugin-import', 'firebase-functions-test', 'typescript'], { 
-        stdio: 'inherit',
-        cwd: path.join(projectPath, 'functions')
-      });
-      
-      // Update functions package.json with correct scripts and configuration
+      // Update functions package.json with correct scripts and configuration BEFORE installing dependencies
       const functionsPackageJsonPath = path.join(projectPath, 'functions', 'package.json');
       const functionsPackageJson = await fs.readJson(functionsPackageJsonPath);
       
@@ -121,12 +110,18 @@ program
         "logs": "firebase functions:log"
       };
       functionsPackageJson.engines = {
-        "node": "22"
+        "node": process.version.replace('v', '').split('.')[0]
       };
       functionsPackageJson.main = "lib/index.js";
       functionsPackageJson.private = true;
       
       await fs.writeJson(functionsPackageJsonPath, functionsPackageJson, { spaces: 2 });
+      
+      // Install all dependencies in one command (regular, dev, and optional)
+      await execa('npm', ['install', '@fireact.dev/functions', '-D', '@typescript-eslint/eslint-plugin', '@typescript-eslint/parser', 'eslint', 'eslint-config-google', 'eslint-plugin-import', 'firebase-functions-test', 'typescript', '--include=optional', '--force'], { 
+        stdio: 'inherit',
+        cwd: path.join(projectPath, 'functions')
+      });
       spinner.succeed('Cloud functions dependencies installed.');
 
       // 5. Copy all template files
@@ -285,13 +280,13 @@ program
         {
           type: 'input',
           name: 'stripePriceId',
-          message: 'Enter the Stripe price ID for your "pro" plan:',
+          message: 'Enter the Stripe price ID for your subscription plan:',
           validate: input => input ? true : 'Price ID is required'
         },
         {
           type: 'number',
           name: 'stripePrice',
-          message: 'Enter the price amount (in dollars) for your "pro" plan (enter 0 for free plan):',
+          message: 'Enter the price amount (in dollars) for your subscription plan (enter 0 for free plan):',
           validate: input => input >= 0 ? true : 'Price cannot be negative'
         }
       ]);
