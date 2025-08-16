@@ -110,7 +110,7 @@ program
         "logs": "firebase functions:log"
       };
       functionsPackageJson.engines = {
-        "node": process.version.replace('v', '').split('.')[0]
+        "node": "22"
       };
       functionsPackageJson.main = "lib/index.js";
       functionsPackageJson.private = true;
