@@ -14,14 +14,12 @@ Visit our [demos page](https://fireact.dev/demos/) to explore live demonstration
 
 ## Features
 
-### Core Features
+### Features
 - **Authentication & User Management**
   - Complete authentication system (sign-up, sign-in, password reset)
   - User profile management
   - Role-based access control
   - Team member invitations and permissions
-
-### SaaS Features
 - **Subscription Management**
   - Multiple subscription plans support
   - Stripe integration for payment processing
@@ -38,21 +36,46 @@ Visit our [demos page](https://fireact.dev/demos/) to explore live demonstration
 
 ## Project Structure
 
-The repository is organized into several key packages:
+The repository is organized into several key directories:
 
-- `core-code/`: Core authentication and user management features
-- `core-demo/`: Demo application showcasing core features
-- `saas-code/`: SaaS features including subscription management
-- `saas-demo/`: Demo application showcasing SaaS features
-- `website/`: Documentation and marketing website
+- **`source/`**: This directory contains the complete, combined source code for the Fireact.dev project, including both the React frontend application and Firebase Cloud Functions backend code. It follows a monorepo structure with `packages/app` for the React app and `packages/functions` for the Cloud Functions.
+- **`create-fireact-app/`**: Contains the CLI tool used to scaffold new Fireact applications.
+- **`website/`**: The main marketing website for fireact.dev, built with Hugo.
+- **`docs/`**: The documentation website for fireact.dev, built with Hugo.
+- **`demo/`**: Contains the demo application.
 
 ## Getting Started
 
-1. Choose your starting point:
-   - Use `core-code` for basic authentication features
-   - Use `saas-code` for full SaaS functionality
+To create a new Fireact application, use the `create-fireact-app` CLI tool. This tool will guide you through the setup process, including Firebase and Stripe configurations.
 
-2. Follow our documentation for detailed setup instructions and best practices
+1. **Install the CLI (if you haven't already)**:
+   ```bash
+   npm install -g create-fireact-app
+   ```
+
+2. **Create a new project**:
+   ```bash
+   create-fireact-app <your-project-name>
+   ```
+   Replace `<your-project-name>` with the desired name for your new application.
+
+3. **Follow the prompts**: The CLI will guide you through selecting your Firebase project and configuring Stripe.
+
+4. **After creation**:
+   Navigate into your new project directory:
+   ```bash
+   cd <your-project-name>
+   ```
+   Then, build the application and functions, and start the emulators:
+   ```bash
+   npm run build && cd functions && npm run build && cd ..
+   firebase emulators:start
+   ```
+   For Stripe webhook testing, in a separate terminal:
+   ```bash
+   stripe listen --forward-to http://127.0.0.1:5001/<your-firebase-project-id>/us-central1/stripeWebhook
+   ```
+   Remember to update `functions/src/config/stripe.config.json` with the new webhook endpoint secret and rebuild functions (`cd functions && npm run build`) if the webhook secret changes.
 
 ## Tech Stack
 
