@@ -118,7 +118,7 @@ program
       await fs.writeJson(functionsPackageJsonPath, functionsPackageJson, { spaces: 2 });
       
       // Install all dependencies in one command (regular, dev, and optional)
-      await execa('npm', ['install', '@fireact.dev/functions', '-D', '@typescript-eslint/eslint-plugin', '@typescript-eslint/parser', 'eslint', 'eslint-config-google', 'eslint-plugin-import', 'firebase-functions-test', 'typescript', '--include=optional', '--force'], { 
+      await execa('npm', ['install', '@fireact.dev/functions', '-D', '@typescript-eslint/eslint-plugin', '@typescript-eslint/parser', 'eslint', 'eslint-config-google', 'eslint-plugin-import', 'firebase-functions-test', 'typescript', '--include=optional'], { 
         stdio: 'inherit',
         cwd: path.join(projectPath, 'functions')
       });
@@ -324,9 +324,11 @@ program
       console.log(chalk.bold.green(`\nSuccessfully created Fireact app "${projectName}"!`));
       console.log(chalk.yellow('\nTo test your app with Firebase emulators and Stripe:'));
       console.log(`  1. cd ${projectName}`);
-      console.log(`  2. npm run build`);
-      console.log(`     (This builds both the React app and cloud functions)`);
-      console.log(`  3. firebase emulators:start`);
+      console.log(`  2. cd functions && npm run build`);
+      console.log(`     (This builds the Cloud Functions)`);
+      console.log(`  3. cd .. && npm run build`);
+      console.log(`     (This builds the React app)`);
+      console.log(`  4. firebase emulators:start`);
       console.log(`     (This starts the frontend on port 5002 and backend emulators)`);
       console.log(`  4. In a new terminal, set up Stripe webhook:`);
       console.log(`     stripe listen --forward-to http://127.0.0.1:5001/${selectedProjectId}/us-central1/stripeWebhook`);

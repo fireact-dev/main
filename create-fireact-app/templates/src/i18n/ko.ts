@@ -40,7 +40,6 @@ export default {
 
   profile: {
     title: "사용자 프로필",
-    myProfile: "내 프로필",
     userId: "사용자 ID",
     emailVerified: "이메일 인증됨",
     creationTime: "계정 생성 시간",
@@ -87,6 +86,11 @@ export default {
     recoverEmailMessage: "이메일 주소 변경을 되돌리시겠습니까?",
     recoverEmailSuccess: "이메일 주소가 성공적으로 복구되었습니다",
     recoverEmailError: "이전 이메일 주소 복구 실패"
+  },
+
+  navigation: {
+    myProfile: "내 프로필",
+    signout: "로그아웃"
   },
 
   subscription: {
@@ -276,6 +280,8 @@ export default {
     cancel: "취소",
     back: "뒤로",
     loading: "로드 중...",
+    yes: "예",
+    no: "아니오",
     pagination: {
       showing: "표시 중",
       to: "부터",

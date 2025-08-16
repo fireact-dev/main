@@ -40,7 +40,6 @@ export default {
 
   profile: {
     title: "User Profile",
-    myProfile: "My Profile",
     userId: "User ID",
     emailVerified: "Email Verified",
     creationTime: "Account Created",
@@ -87,6 +86,11 @@ export default {
     recoverEmailMessage: "Do you want to revert your email address change?",
     recoverEmailSuccess: "Your email address has been successfully reverted",
     recoverEmailError: "Failed to recover your previous email address"
+  },
+
+  navigation: {
+    myProfile: "My Profile",
+    signout: "Sign Out"
   },
 
   subscription: {
@@ -276,6 +280,8 @@ export default {
     cancel: "Cancel",
     back: "Back",
     loading: "Loading...",
+    yes: "Yes",
+    no: "No",
     pagination: {
       showing: "Showing",
       to: "to",

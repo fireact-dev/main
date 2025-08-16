@@ -40,7 +40,6 @@ export default {
 
   profile: {
     title: "使用者個人資料",
-    myProfile: "我的個人資料",
     userId: "使用者 ID",
     emailVerified: "電子郵件已驗證",
     creationTime: "帳戶建立時間",
@@ -87,6 +86,11 @@ export default {
     recoverEmailMessage: "您要復原先前的電子郵件地址嗎？",
     recoverEmailSuccess: "您的電子郵件地址已成功復原",
     recoverEmailError: "復原先前的電子郵件地址失敗"
+  },
+
+  navigation: {
+    myProfile: "我的個人資料",
+    signout: "登出"
   },
 
   subscription: {
@@ -276,6 +280,8 @@ export default {
     cancel: "取消",
     back: "返回",
     loading: "載入中...",
+    yes: "是",
+    no: "否",
     pagination: {
       showing: "顯示",
       to: "至",

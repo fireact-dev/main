@@ -40,7 +40,6 @@ export default {
 
   profile: {
     title: "Perfil do usuário",
-    myProfile: "Meu perfil",
     userId: "ID do usuário",
     emailVerified: "E-mail verificado",
     creationTime: "Conta criada",
@@ -87,6 +86,11 @@ export default {
     recoverEmailMessage: "Deseja reverter a alteração do seu endereço de e-mail?",
     recoverEmailSuccess: "Seu endereço de e-mail foi revertido com sucesso",
     recoverEmailError: "Falha ao recuperar seu endereço de e-mail anterior"
+  },
+
+  navigation: {
+    myProfile: "Meu perfil",
+    signout: "Sair"
   },
 
   subscription: {
@@ -276,6 +280,8 @@ export default {
     cancel: "Cancelar",
     back: "Voltar",
     loading: "Carregando...",
+    yes: "Sim",
+    no: "Não",
     pagination: {
       showing: "Mostrando",
       to: "a",

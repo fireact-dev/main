@@ -40,7 +40,6 @@ export default {
 
   profile: {
     title: "Benutzerprofil",
-    myProfile: "Mein Profil",
     userId: "Benutzer-ID",
     emailVerified: "E-Mail verifiziert",
     creationTime: "Konto erstellt",
@@ -87,6 +86,11 @@ export default {
     recoverEmailMessage: "Möchten Sie Ihre E-Mail-Adresse wiederherstellen?",
     recoverEmailSuccess: "Ihre E-Mail-Adresse wurde erfolgreich wiederhergestellt",
     recoverEmailError: "Fehler beim Wiederherstellen Ihrer vorherigen E-Mail-Adresse"
+  },
+
+  navigation: {
+    myProfile: "Mein Profil",
+    signout: "Abmelden"
   },
 
   subscription: {
@@ -276,6 +280,8 @@ export default {
     cancel: "Abbrechen",
     back: "Zurück",
     loading: "Wird geladen...",
+    yes: "Ja",
+    no: "Nein",
     pagination: {
       showing: "Zeigt",
       to: "bis",

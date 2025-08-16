@@ -40,7 +40,6 @@ export default {
 
   profile: {
     title: "用户信息",
-    myProfile: "我的资料",
     userId: "用户ID",
     emailVerified: "邮箱已验证",
     creationTime: "创建时间",
@@ -87,6 +86,11 @@ export default {
     recoverEmailMessage: "您想要恢复到原来的邮箱地址吗？",
     recoverEmailSuccess: "您的邮箱地址已成功恢复",
     recoverEmailError: "恢复原邮箱地址失败"
+  },
+
+  navigation: {
+    myProfile: "我的资料",
+    signout: "退出"
   },
 
   subscription: {

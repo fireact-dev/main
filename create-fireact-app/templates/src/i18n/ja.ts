@@ -40,7 +40,6 @@ export default {
 
   profile: {
     title: "ユーザープロフィール",
-    myProfile: "マイプロフィール",
     userId: "ユーザーID",
     emailVerified: "メール確認済み",
     creationTime: "アカウント作成日時",
@@ -87,6 +86,11 @@ export default {
     recoverEmailMessage: "メールアドレスの変更を元に戻しますか？",
     recoverEmailSuccess: "メールアドレスが正常に復元されました",
     recoverEmailError: "以前のメールアドレスの復元に失敗しました"
+  },
+
+  navigation: {
+    myProfile: "マイプロフィール",
+    signout: "サインアウト"
   },
 
   subscription: {
@@ -276,6 +280,8 @@ export default {
     cancel: "キャンセル",
     back: "戻る",
     loading: "読み込み中...",
+    yes: "はい",
+    no: "いいえ",
     pagination: {
       showing: "表示中",
       to: "から",
