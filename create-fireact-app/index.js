@@ -38,14 +38,15 @@ program
 
 program
   .argument('<project-name>', 'The name of the project to create')
-  .action(async (projectName) => {
+  .option('--existing', 'Install in an existing directory')
+  .action(async (projectName, options) => {
     const spinner = ora();
 
     const projectPath = path.resolve(process.cwd(), projectName);
 
     // Check if directory already exists
-    if (fs.existsSync(projectPath)) {
-      console.error(chalk.red(`Error: Directory "${projectName}" already exists.`));
+    if (fs.existsSync(projectPath) && !options.existing) {
+      console.error(chalk.red(`Error: Directory "${projectName}" already exists. Use --existing to install anyway.`));
       process.exit(1);
     }
 
@@ -67,32 +68,83 @@ program
 
       // 2. Create Vite Project
       spinner.start('Creating Vite project...');
-      await execa('npm', ['create', 'vite@latest', projectName, '--', '--template', 'react-ts'], { stdio: 'inherit' });
+      await execa('npm', ['create', 'vite@latest', projectName, '--yes', '--', '--template', 'react-ts'], { stdio: 'pipe' });
       spinner.succeed('Vite project created successfully.');
 
       // Change directory to the new project
       process.chdir(projectPath);
 
-      // 3. Install Dependencies with --legacy-peer-deps
+      // 3. Install Dependencies
       spinner.start('Installing dependencies...');
-      // Install core dependencies
-      await execa('npm', ['install', '@fireact.dev/app', 'firebase', 'react-router-dom', 'i18next', 'react-i18next', '@headlessui/react', '@heroicons/react', 'tailwindcss@3', 'i18next-browser-languagedetector', '--legacy-peer-deps'], { stdio: 'inherit' });
+      // Install main packages (peer dependencies will be installed automatically in npm v7+)
+      await execa('npm', ['install', '@fireact.dev/app', 'i18next-browser-languagedetector'], { stdio: 'inherit' });
+      
       // Install dev dependencies
-      await execa('npm', ['install', '-D', '@vitejs/plugin-react', '@types/react', '@types/react-dom', 'typescript', 'postcss', 'autoprefixer', '@tailwindcss/postcss', 'eslint', '@eslint/js', 'eslint-plugin-react-hooks', 'eslint-plugin-react-refresh', 'globals', 'typescript-eslint', '--legacy-peer-deps'], { stdio: 'inherit' });
+      await execa('npm', ['install', '-D', '@vitejs/plugin-react', '@types/react', '@types/react-dom', 'typescript', 'postcss', 'autoprefixer', '@tailwindcss/postcss', 'eslint', '@eslint/js', 'eslint-plugin-react-hooks', 'eslint-plugin-react-refresh', 'globals', 'typescript-eslint'], { stdio: 'inherit' });
+      
       spinner.succeed('Dependencies installed successfully.');
 
-      // 4. Copy all template files
+      // 4. Install cloud functions dependencies
+      spinner.start('Installing cloud functions dependencies...');
+      await fs.ensureDir(path.join(projectPath, 'functions'));
+      
+      // Initialize npm in functions directory
+      await execa('npm', ['init', '-y'], { 
+        stdio: 'inherit',
+        cwd: path.join(projectPath, 'functions')
+      });
+      
+      // Install dependencies (peer dependencies will be installed automatically in npm v7+)
+      await execa('npm', ['install', '@fireact.dev/functions'], { 
+        stdio: 'inherit',
+        cwd: path.join(projectPath, 'functions')
+      });
+      // Install dev dependencies
+      await execa('npm', ['install', '-D', '@typescript-eslint/eslint-plugin', '@typescript-eslint/parser', 'eslint', 'eslint-config-google', 'eslint-plugin-import', 'firebase-functions-test', 'typescript'], { 
+        stdio: 'inherit',
+        cwd: path.join(projectPath, 'functions')
+      });
+      
+      // Update functions package.json with correct scripts and configuration
+      const functionsPackageJsonPath = path.join(projectPath, 'functions', 'package.json');
+      const functionsPackageJson = await fs.readJson(functionsPackageJsonPath);
+      
+      // Update with Firebase Functions specific configuration
+      functionsPackageJson.scripts = {
+        "lint": "eslint --ext .js,.ts .",
+        "build": "tsc",
+        "build:watch": "tsc --watch",
+        "serve": "npm run build && firebase emulators:start --only functions",
+        "shell": "npm run build && firebase functions:shell",
+        "start": "npm run shell",
+        "deploy": "firebase deploy --only functions",
+        "logs": "firebase functions:log"
+      };
+      functionsPackageJson.engines = {
+        "node": "22"
+      };
+      functionsPackageJson.main = "lib/index.js";
+      functionsPackageJson.private = true;
+      
+      await fs.writeJson(functionsPackageJsonPath, functionsPackageJson, { spaces: 2 });
+      spinner.succeed('Cloud functions dependencies installed.');
+
+      // 5. Copy all template files
       spinner.start('Copying template files...');
       await fs.copy(
         path.join(__dirname, 'templates'),
         projectPath,
         { overwrite: true }
       );
+      
+      // Ensure config directories exist
+      await fs.ensureDir(path.join(projectPath, 'src', 'config'));
+      await fs.ensureDir(path.join(projectPath, 'functions', 'src', 'config'));
       spinner.succeed('Template files copied successfully.');
 
       // --- Phase 2: Interactive Configuration ---
 
-      // 5. Firebase Configuration
+      // 6. Firebase Configuration
       spinner.start('Fetching your Firebase projects...');
       const firebaseProjectsResult = await execa('firebase', ['projects:list', '--json'], { reject: false, stdio: 'pipe' });
 
@@ -273,12 +325,23 @@ program
 
       spinner.succeed('Stripe configuration completed.');
 
-      // 6. Final Instructions
+      // 7. Final Instructions
       console.log(chalk.bold.green(`\nSuccessfully created Fireact app "${projectName}"!`));
-      console.log(chalk.yellow('Next steps:'));
+      console.log(chalk.yellow('\nTo test your app with Firebase emulators and Stripe:'));
       console.log(`  1. cd ${projectName}`);
-      console.log(`  2. Run 'npm run dev' to start the development server.`);
-      console.log(`  3. Your Firebase project "${selectedProjectId}" is now configured.`);
+      console.log(`  2. npm run build`);
+      console.log(`     (This builds both the React app and cloud functions)`);
+      console.log(`  3. firebase emulators:start`);
+      console.log(`     (This starts the frontend on port 5002 and backend emulators)`);
+      console.log(`  4. In a new terminal, set up Stripe webhook:`);
+      console.log(`     stripe listen --forward-to http://127.0.0.1:5001/${selectedProjectId}/us-central1/stripeWebhook`);
+      console.log(`     (This will generate a new webhook endpoint secret)`);
+      console.log(`  5. Copy the webhook endpoint secret and update:`);
+      console.log(`     functions/src/config/stripe.config.json`);
+      console.log(`  6. Rebuild functions: cd functions && npm run build`);
+      console.log(`  7. Your app will be available at http://localhost:5002`);
+      console.log(chalk.cyan(`\nYour Firebase project "${selectedProjectId}" is configured and ready!`));
+      console.log(chalk.gray('Note: You\'ll need to be logged into Stripe CLI for webhook testing.'));
 
     } catch (error) {
       spinner.fail('An error occurred during project creation.');

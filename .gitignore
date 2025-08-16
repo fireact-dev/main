@@ -34,3 +34,4 @@ coverage/
 # Temporary files
 *.log
 *.tmp
+test-app/

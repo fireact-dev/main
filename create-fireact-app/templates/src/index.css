@@ -1,1 +1,4 @@
 @import "tailwindcss";
+
+/* Make Tailwind scan the @fireact.dev/app package for class names */
+@source "../node_modules/@fireact.dev/app/dist/**/*.{js,mjs}";
