@@ -110,15 +110,21 @@ program
         "logs": "firebase functions:log"
       };
       functionsPackageJson.engines = {
-        "node": "22"
+        "node": "20"
       };
       functionsPackageJson.main = "lib/index.js";
       functionsPackageJson.private = true;
       
       await fs.writeJson(functionsPackageJsonPath, functionsPackageJson, { spaces: 2 });
       
-      // Install all dependencies in one command (regular, dev, and optional)
-      await execa('npm', ['install', '@fireact.dev/functions', '-D', '@typescript-eslint/eslint-plugin', '@typescript-eslint/parser', 'eslint', 'eslint-config-google', 'eslint-plugin-import', 'firebase-functions-test', 'typescript', '--include=optional'], { 
+      // Install regular dependencies
+      await execa('npm', ['install', '@fireact.dev/functions'], { 
+        stdio: 'inherit',
+        cwd: path.join(projectPath, 'functions')
+      });
+      
+      // Install dev dependencies
+      await execa('npm', ['install', '-D', '@typescript-eslint/eslint-plugin', '@typescript-eslint/parser', 'eslint', 'eslint-config-google', 'eslint-plugin-import', 'firebase-functions-test', 'typescript', '--include=optional'], { 
         stdio: 'inherit',
         cwd: path.join(projectPath, 'functions')
       });

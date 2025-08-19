@@ -1,6 +1,6 @@
 {
   "name": "create-fireact-app",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "CLI to create a new Fireact application",
   "main": "index.js",
   "type": "module",
