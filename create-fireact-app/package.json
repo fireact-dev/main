@@ -1,6 +1,6 @@
 {
   "name": "create-fireact-app",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "CLI to create a new Fireact application",
   "main": "index.js",
   "type": "module",
@@ -22,7 +22,7 @@
   "dependencies": {
     "chalk": "^5.0.0",
     "commander": "^12.0.0",
-    "execa": "^9.0.0",
+    "execa": "^9.6.0",
     "fs-extra": "^11.0.0",
     "inquirer": "^10.0.0",
     "ora": "^8.0.0"

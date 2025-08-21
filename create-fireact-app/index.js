@@ -9,14 +9,14 @@ import inquirer from 'inquirer';
 import ora from 'ora'; // Import ora for spinners
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-const packageJson = require('./package.json');
 
 // Helper to get __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// Read package.json synchronously to get the version
+const packageJsonPath = path.resolve(__dirname, 'package.json');
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 
 // Helper function to replace template variables in files
 async function replaceInFile(filePath, replacements) {
