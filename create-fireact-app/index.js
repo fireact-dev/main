@@ -9,6 +9,10 @@ import inquirer from 'inquirer';
 import ora from 'ora'; // Import ora for spinners
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const packageJson = require('./package.json');
 
 // Helper to get __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -34,7 +38,7 @@ const program = new Command();
 program
   .name('create-fireact-app')
   .description('CLI to create a new Fireact application')
-  .version('1.0.0');
+  .version(packageJson.version);
 
 program
   .argument('<project-name>', 'The name of the project to create')
