@@ -64,6 +64,7 @@ export default {
     emailVerificationError: "確認メールの送信に失敗しました。もう一度お試しください。",
     emailVerificationResent: "新しい確認メールが受信トレイに送信されました。",
     emailVerificationTooManyRequests: "確認メールの要求が多すぎます。しばらく待ってからもう一度お試しください。",
+    reAuthenticationRequired: "再試行する前に再度サインインしてください",
     newPassword: "新しいパスワード",
     passwordUpdateSuccess: "パスワードが正常に更新されました",
     passwordUpdateError: "パスワードの更新に失敗しました。もう一度お試しください",

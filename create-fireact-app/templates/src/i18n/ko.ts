@@ -64,6 +64,7 @@ export default {
     emailVerificationError: "인증 이메일 전송 실패. 다시 시도해주세요.",
     emailVerificationResent: "새로운 인증 이메일이 받은 편지함으로 전송되었습니다.",
     emailVerificationTooManyRequests: "인증 이메일 요청이 너무 많습니다. 잠시 후 다시 시도해주세요.",
+    reAuthenticationRequired: "다시 시도하기 전에 다시 로그인해주세요",
     newPassword: "새 비밀번호",
     passwordUpdateSuccess: "비밀번호가 성공적으로 업데이트되었습니다",
     passwordUpdateError: "비밀번호 업데이트 실패. 다시 시도해주세요",

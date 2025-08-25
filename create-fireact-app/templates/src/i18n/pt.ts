@@ -64,6 +64,7 @@ export default {
     emailVerificationError: "Falha ao enviar e-mail de verificação. Por favor, tente novamente.",
     emailVerificationResent: "Um novo e-mail de verificação foi enviado para sua caixa de entrada.",
     emailVerificationTooManyRequests: "Muitas solicitações de e-mail de verificação. Por favor, aguarde um pouco antes de tentar novamente.",
+    reAuthenticationRequired: "Por favor, faça login novamente antes de tentar novamente",
     newPassword: "Nova senha",
     passwordUpdateSuccess: "Sua senha foi atualizada com sucesso",
     passwordUpdateError: "Falha ao atualizar sua senha. Por favor, tente novamente",

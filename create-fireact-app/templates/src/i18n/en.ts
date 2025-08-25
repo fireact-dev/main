@@ -64,6 +64,7 @@ export default {
     emailVerificationError: "Failed to send verification email. Please try again.",
     emailVerificationResent: "A new verification email has been sent to your inbox.",
     emailVerificationTooManyRequests: "Too many verification email requests. Please wait a while before trying again.",
+    reAuthenticationRequired: "Please sign in again before retry",
     newPassword: "New Password",
     passwordUpdateSuccess: "Your password has been updated successfully",
     passwordUpdateError: "Failed to update your password. Please try again",

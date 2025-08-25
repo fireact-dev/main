@@ -64,6 +64,7 @@ export default {
     emailVerificationError: "Échec de l'envoi de l'e-mail de vérification. Veuillez réessayer.",
     emailVerificationResent: "Un nouvel e-mail de vérification a été envoyé à votre boîte de réception.",
     emailVerificationTooManyRequests: "Trop de demandes d'e-mails de vérification. Veuillez patienter un moment avant de réessayer.",
+    reAuthenticationRequired: "Veuillez vous reconnecter avant de réessayer",
     newPassword: "Nouveau mot de passe",
     passwordUpdateSuccess: "Votre mot de passe a été mis à jour avec succès",
     passwordUpdateError: "Échec de la mise à jour de votre mot de passe. Veuillez réessayer",

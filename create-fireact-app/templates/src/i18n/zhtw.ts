@@ -64,6 +64,7 @@ export default {
     emailVerificationError: "傳送驗證電子郵件失敗，請再試一次。",
     emailVerificationResent: "新的驗證電子郵件已傳送至您的收件匣。",
     emailVerificationTooManyRequests: "驗證電子郵件請求過多，請稍後再試。",
+    reAuthenticationRequired: "請重新登入後再試",
     newPassword: "新密碼",
     passwordUpdateSuccess: "您的密碼已成功更新",
     passwordUpdateError: "更新密碼失敗，請再試一次",

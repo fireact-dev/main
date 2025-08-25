@@ -64,6 +64,7 @@ export default {
     emailVerificationError: "发送验证邮件失败，请重试。",
     emailVerificationResent: "新的验证邮件已发送到您的收件箱。",
     emailVerificationTooManyRequests: "验证邮件请求过于频繁，请稍后再试。",
+    reAuthenticationRequired: "重试前请重新登录",
     newPassword: "新密码",
     passwordUpdateSuccess: "您的密码已更新成功",
     passwordUpdateError: "更新密码失败，请重试",

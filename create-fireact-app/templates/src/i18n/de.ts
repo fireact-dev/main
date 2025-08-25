@@ -64,6 +64,7 @@ export default {
     emailVerificationError: "Fehler beim Senden der Verifizierungs-E-Mail. Bitte versuchen Sie es erneut.",
     emailVerificationResent: "Eine neue Verifizierungs-E-Mail wurde an Ihren Posteingang gesendet.",
     emailVerificationTooManyRequests: "Zu viele Verifizierungs-E-Mail-Anfragen. Bitte warten Sie eine Weile, bevor Sie es erneut versuchen.",
+    reAuthenticationRequired: "Bitte melden Sie sich erneut an, bevor Sie es erneut versuchen",
     newPassword: "Neues Passwort",
     passwordUpdateSuccess: "Ihr Passwort wurde erfolgreich aktualisiert",
     passwordUpdateError: "Fehler beim Aktualisieren Ihres Passworts. Bitte versuchen Sie es erneut",
