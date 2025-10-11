@@ -84,25 +84,178 @@ To create a new Fireact application, use the `create-fireact-app` CLI tool. This
 - **Payment Processing**: Stripe
 - **Development Tools**: Vite, ESLint, PostCSS
 
+## Deployment
+
+### Preparing for Production
+
+Before deploying to production:
+
+1. **Update Configuration Files**:
+   - Replace emulator settings with production Firebase config
+   - Use production Stripe API keys
+   - Set `emulators.enabled` to `false` in firebase.config.json
+
+2. **Build for Production**:
+   ```bash
+   cd <your-project-name>
+   npm run build
+   cd functions
+   npm run build
+   cd ..
+   ```
+
+3. **Test Production Build Locally**:
+   ```bash
+   firebase emulators:start --only hosting
+   ```
+
+### Deploying to Firebase
+
+**Initial Deployment:**
+
+```bash
+# Deploy everything
+firebase deploy
+
+# Or deploy specific services
+firebase deploy --only hosting        # React app
+firebase deploy --only functions      # Cloud Functions
+firebase deploy --only firestore      # Security rules & indexes
+```
+
+**Subsequent Deployments:**
+
+```bash
+# Deploy only what changed
+firebase deploy --only hosting,functions
+```
+
+### Environment-Specific Deployments
+
+**Using Multiple Firebase Projects:**
+
+```bash
+# Set up aliases
+firebase use --add
+
+# Deploy to staging
+firebase use staging
+firebase deploy
+
+# Deploy to production
+firebase use production
+firebase deploy
+```
+
+### CI/CD with GitHub Actions
+
+Create `.github/workflows/deploy.yml`:
+
+```yaml
+name: Deploy to Firebase
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm install
+          cd functions && npm install
+
+      - name: Build
+        run: |
+          npm run build
+          cd functions && npm run build
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+```
+
+Get Firebase token:
+```bash
+firebase login:ci
+# Save the token as GitHub secret: FIREBASE_TOKEN
+```
+
+### CI/CD with Google Cloud Build
+
+See [demo/README.md](demo/README.md) for detailed Cloud Build setup with secure configuration management.
+
+### Post-Deployment
+
+**Verify Deployment:**
+
+1. Check hosting URL: `https://your-project.web.app`
+2. Test authentication flow
+3. Verify Cloud Functions
+4. Check Firestore connectivity
+5. Test Stripe webhooks
+
+**Set Up Production Webhook:**
+
+```bash
+# Add webhook endpoint in Stripe Dashboard
+https://us-central1-your-project.cloudfunctions.net/stripeWebhook
+
+# Use production webhook secret in stripe.config.json
+```
+
+**Monitor:**
+
+- Firebase Console → Functions logs
+- Firebase Console → Analytics
+- Stripe Dashboard → Webhooks
+- Error tracking (recommended: Sentry, LogRocket)
+
+For detailed deployment guides, see:
+- [Firebase Deployment Docs](https://firebase.google.com/docs/hosting/deploying)
+- [Architecture Documentation](ARCHITECTURE.md)
+- [Demo CI/CD Setup](demo/README.md)
+
 ## Documentation
 
 Visit [fireact.dev](https://fireact.dev) for comprehensive documentation, including:
 
-- Getting Started Guide
-- Component Documentation
-- API Reference
-- Best Practices
-- Deployment Guide
+- [Getting Started Guide](docs/content/getting-started.md)
+- [Architecture Overview](ARCHITECTURE.md)
+- [Component Documentation](https://docs.fireact.dev/app)
+- [API Reference](https://docs.fireact.dev)
+- [Custom Development Guide](https://docs.fireact.dev/custom-development)
+- [Troubleshooting Guide](TROUBLESHOOTING.md)
 
 ## Contributing
 
-We welcome contributions! Please read our contributing guidelines before submitting pull requests.
+We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
+
+Key contribution areas:
+- Bug fixes and improvements
+- New features and components
+- Documentation enhancements
+- Example applications
+- Test coverage
+
+## Community & Support
+
+- **Website**: [fireact.dev](https://fireact.dev)
+- **Documentation**: [docs.fireact.dev](https://docs.fireact.dev)
+- **GitHub Issues**: [Report bugs and request features](https://github.com/fireact-dev/fireact.dev/issues)
+- **GitHub Discussions**: Community questions and discussions
+- **Demo Application**: [Live Demo](https://fireact.dev/demos/)
 
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
-
-## Support
-
-- Website: [fireact.dev](https://fireact.dev)
-- GitHub Issues: For bug reports and feature requests
