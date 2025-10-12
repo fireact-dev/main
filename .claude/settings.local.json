@@ -3,7 +3,8 @@
     "allow": [
       "Bash(git submodule:*)",
       "Bash(tree:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npm install)"
     ],
     "deny": [],
     "ask": []

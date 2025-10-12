@@ -340,13 +340,13 @@ program
       console.log(`     (This builds the React app)`);
       console.log(`  4. firebase emulators:start`);
       console.log(`     (This starts the frontend on port 5002 and backend emulators)`);
-      console.log(`  4. In a new terminal, set up Stripe webhook:`);
+      console.log(`  5. In a new terminal, set up Stripe webhook:`);
       console.log(`     stripe listen --forward-to http://127.0.0.1:5001/${selectedProjectId}/us-central1/stripeWebhook`);
       console.log(`     (This will generate a new webhook endpoint secret)`);
-      console.log(`  5. Copy the webhook endpoint secret and update:`);
+      console.log(`  6. Copy the webhook endpoint secret and update:`);
       console.log(`     functions/src/config/stripe.config.json`);
-      console.log(`  6. Rebuild functions: cd functions && npm run build`);
-      console.log(`  7. Your app will be available at http://localhost:5002`);
+      console.log(`  7. Rebuild functions: cd functions && npm run build`);
+      console.log(`  8. Your app will be available at http://localhost:5002`);
       console.log(chalk.cyan(`\nYour Firebase project "${selectedProjectId}" is configured and ready!`));
       console.log(chalk.gray('Note: You\'ll need to be logged into Stripe CLI for webhook testing.'));
 
