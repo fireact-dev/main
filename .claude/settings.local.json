@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(git submodule:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
