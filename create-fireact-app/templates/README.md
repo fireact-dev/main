@@ -54,7 +54,17 @@ Once the `create-fireact-app` command completes, follow these steps to run your 
 
 The `create-fireact-app` CLI provides a solid foundation with essential SaaS functionalities like authentication, user management, and subscription handling. However, the generated application is a starting point. To build the specific features and unique user experience for your SaaS product, you will need to engage in custom development.
 
-For comprehensive guides on how to customize your SaaS application, refer to the [Custom Development section of the Fireact.dev documentation](https://docs.fireact.dev/custom-development/).
+### AI-Assisted Customization with Claude Code
+
+This project includes a built-in [Claude Code](https://claude.com/claude-code) skill that helps you customize your app using natural language. Open your project in Claude Code and:
+
+*   Type `/fireact-builder` to invoke the skill, or simply describe what you want — it auto-detects Fireact projects.
+*   Ask things like "add a reports page", "customize the sign-in page", or "add a cloud function".
+*   The skill reads your project state first, then follows structured playbooks to make correct changes across all the right files (components, routes, config, i18n, etc.).
+
+### Manual Customization
+
+For comprehensive guides on how to customize your SaaS application manually, refer to the [Custom Development section of the Fireact.dev documentation](https://docs.fireact.dev/custom-development/).
 
 *   Develop your own React components and pages.
 *   Understand and manage data fetching within the framework.

@@ -27,6 +27,12 @@ Visit our [demos page](https://fireact.dev/demos/) to explore live demonstration
   - Payment method management
   - Subscription upgrades and downgrades
 
+### AI-Assisted Development (Claude Code)
+- Built-in Claude Code skill for post-installation customization
+- Natural language commands to add pages, components, navigation, Cloud Functions, and more
+- 8 customization playbooks with step-by-step guidance
+- Invoke with `/fireact-builder` or let it auto-detect your project
+
 ### Developer Experience
 - TypeScript for better code quality
 - TailwindCSS for responsive design
@@ -235,6 +241,7 @@ Visit [fireact.dev](https://fireact.dev) for comprehensive documentation, includ
 - [Component Documentation](https://docs.fireact.dev/app)
 - [API Reference](https://docs.fireact.dev)
 - [Custom Development Guide](https://docs.fireact.dev/custom-development)
+- [AI-Assisted Development with Claude Code](https://docs.fireact.dev/custom-development/claude-code/)
 - [Troubleshooting Guide](TROUBLESHOOTING.md)
 
 ## Contributing

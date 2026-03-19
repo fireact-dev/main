@@ -70,6 +70,7 @@ Sets up a complete React application with:
 - Cloud Functions setup
 - Firestore security rules
 - Development environment configuration
+- Built-in Claude Code skill for AI-assisted customization
 
 ### Firebase Integration
 - Interactive Firebase project selection
@@ -98,6 +99,19 @@ Creates and configures:
 - `.firebaserc` - Firebase project reference
 - `firestore.rules` - Database security rules
 - `firestore.indexes.json` - Database indexes
+
+## AI-Assisted Customization with Claude Code
+
+Every scaffolded project includes a built-in [Claude Code](https://claude.com/claude-code) skill that helps you customize your app using natural language. Open your project in Claude Code and use the `/fireact-builder` command, or simply describe what you want — the skill auto-detects Fireact projects.
+
+**What you can do:**
+- "Add a reports page to my subscription"
+- "Customize the sign-in page"
+- "Add a link to the sidebar navigation"
+- "Add a cloud function that sends a welcome email"
+- "Change the nav bar color to blue"
+
+The skill includes 8 customization playbooks covering pages, components, navigation, branding, Cloud Functions, Firestore collections, and i18n. See the [Claude Code documentation](https://docs.fireact.dev/custom-development/claude-code/) for details.
 
 ## Post-Installation Steps
 
@@ -164,6 +178,9 @@ The generated project includes:
 
 ```
 your-project-name/
+├── .claude/               # Claude Code skill
+│   └── skills/
+│       └── fireact-builder/  # AI-assisted customization skill
 ├── src/                    # React application source
 │   ├── components/        # React components
 │   ├── contexts/          # React contexts
