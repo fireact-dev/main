@@ -381,7 +381,7 @@ npm config set prefix '~/.npm-global'
 export PATH=~/.npm-global/bin:$PATH
 ```
 
-For more troubleshooting, see the [main troubleshooting guide](https://github.com/fireact-dev/fireact.dev/blob/main/TROUBLESHOOTING.md).
+For more troubleshooting, see the [main troubleshooting guide](https://github.com/fireact-dev/main/blob/main/TROUBLESHOOTING.md).
 
 ## Example Workflow
 
@@ -449,8 +449,8 @@ For detailed development guidelines, refer to the root [README.md](../README.md)
 
 - **Documentation**: [docs.fireact.dev](https://docs.fireact.dev)
 - **Website**: [fireact.dev](https://fireact.dev)
-- **GitHub**: [github.com/fireact-dev](https://github.com/fireact-dev)
-- **Issues**: [Report bugs](https://github.com/fireact-dev/fireact.dev/issues)
+- **GitHub**: [github.com/fireact-dev/main](https://github.com/fireact-dev/main)
+- **Issues**: [Report bugs](https://github.com/fireact-dev/main/issues)
 
 ## License
 

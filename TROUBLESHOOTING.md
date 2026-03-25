@@ -732,7 +732,7 @@ git commit -m "Update source submodule reference"
 
 If you're still experiencing issues:
 
-1. **Check existing issues:** [GitHub Issues](https://github.com/fireact-dev/fireact.dev/issues)
+1. **Check existing issues:** [GitHub Issues](https://github.com/fireact-dev/main/issues)
 2. **Search documentation:** [docs.fireact.dev](https://docs.fireact.dev)
 3. **Ask the community:** GitHub Discussions
 4. **Report a bug:** Create a new issue with:

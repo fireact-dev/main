@@ -108,7 +108,7 @@ git push origin feature/your-feature-name
 
 ```bash
 # Add upstream remote (only needed once)
-git remote add upstream https://github.com/fireact-dev/fireact.dev.git
+git remote add upstream https://github.com/fireact-dev/main.git
 
 # Fetch and merge updates
 git fetch upstream
