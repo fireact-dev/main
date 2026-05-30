@@ -35,3 +35,5 @@ coverage/
 *.log
 *.tmp
 test-app/
+# Worktrees for isolated feature work — never tracked.
+.worktree/
