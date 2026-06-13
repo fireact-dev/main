@@ -9,8 +9,9 @@ service cloud.firestore {
 
     // Subscription document rules
     match /subscriptions/{docId} {
-      // Allow listing subscriptions for authenticated users
-      allow list: if request.auth != null;
+      // List queries disabled — subscription loading uses the getUserSubscriptions
+      // Cloud Function (Admin SDK) to prevent cross-user data enumeration
+      allow list: if false;
       
       // Allow get (individual document read) only to users in permissions.access array
       allow get: if request.auth != null 

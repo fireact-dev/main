@@ -52,5 +52,6 @@ export {
   deletePaymentMethod,
   updateBillingDetails,
   getBillingDetails,
-  transferSubscriptionOwnership
+  transferSubscriptionOwnership,
+  getUserSubscriptions
 } from '@fireact.dev/functions';
