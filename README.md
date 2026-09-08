@@ -259,8 +259,8 @@ Key contribution areas:
 
 - **Website**: [fireact.dev](https://fireact.dev)
 - **Documentation**: [docs.fireact.dev](https://docs.fireact.dev)
-- **GitHub Issues**: [Report bugs and request features](https://github.com/fireact-dev/main/issues)
-- **GitHub Discussions**: Community questions and discussions
+- **GitHub Discussions**: [Ask a question or get help getting started](https://github.com/fireact-dev/main/discussions) — start here if you're not sure it's a bug
+- **GitHub Issues**: [Report a confirmed bug or request a feature](https://github.com/fireact-dev/main/issues)
 - **Demo Application**: [Live Demo](https://fireact.dev/demos/)
 
 ## License
