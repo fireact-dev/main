@@ -373,7 +373,7 @@ We're working on adding automated tests. Stay tuned for updates!
 
 ### Getting Help
 
-- **[GitHub Discussions](https://github.com/fireact-dev/main/discussions)**: Ask setup/usage questions here first — this is the low-friction option, not a bug report
+- **[GitHub Discussions](https://github.com/fireact-dev/main/discussions)**: Ask setup/usage questions here first. This is the low-friction option, not a bug report.
 - **GitHub Issues**: For confirmed bugs and feature requests once you've ruled out a usage question
 - **Documentation**: [fireact.dev](https://fireact.dev)
 
@@ -400,7 +400,7 @@ When suggesting features:
 
 ### Communication Channels
 
-- **GitHub Discussions**: Questions, ideas, community chat — try this first
+- **GitHub Discussions**: Questions, ideas, community chat (try this first)
 - **GitHub Issues**: Bug reports, feature requests
 - **Pull Requests**: Code contributions
 
