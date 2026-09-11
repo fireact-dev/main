@@ -80,11 +80,18 @@ program
 
       // 3. Install Dependencies
       spinner.start('Installing dependencies...');
-      // Install main packages (peer dependencies will be installed automatically in npm v7+)
-      await execa('npm', ['install', '@fireact.dev/app', 'i18next-browser-languagedetector'], { stdio: 'inherit' });
-      
+      // Install main packages. --legacy-peer-deps: Vite's react-ts template
+      // currently defaults to a TypeScript major version newer than what
+      // @fireact.dev/app's own peer deps (i18next / react-i18next, which
+      // declare `typescript: ^5`) accept, so npm 7+'s strict peer
+      // resolution fails here with ERESOLVE — confirmed directly, not
+      // theoretical. The actual installed typescript is compatible in
+      // practice; this is a peer-range lag in i18next/react-i18next, not a
+      // real incompatibility.
+      await execa('npm', ['install', '--legacy-peer-deps', '@fireact.dev/app', 'i18next-browser-languagedetector'], { stdio: 'inherit' });
+
       // Install dev dependencies
-      await execa('npm', ['install', '-D', '@vitejs/plugin-react', '@types/react', '@types/react-dom', 'typescript', 'postcss', 'autoprefixer', '@tailwindcss/postcss', 'eslint', '@eslint/js', 'eslint-plugin-react-hooks', 'eslint-plugin-react-refresh', 'globals', 'typescript-eslint'], { stdio: 'inherit' });
+      await execa('npm', ['install', '--legacy-peer-deps', '-D', '@vitejs/plugin-react', '@types/react', '@types/react-dom', 'typescript', 'postcss', 'autoprefixer', '@tailwindcss/postcss', 'eslint', '@eslint/js', 'eslint-plugin-react-hooks', 'eslint-plugin-react-refresh', 'globals', 'typescript-eslint'], { stdio: 'inherit' });
       
       spinner.succeed('Dependencies installed successfully.');
 
